@@ -1,0 +1,45 @@
+
+.drilldown-chart {
+    display: block;
+
+    &-background {
+        fill: #ffffff;
+    }
+
+    .axis {
+        shape-rendering: crispEdges;
+    }
+      
+    .axis path, .axis line {
+        fill: none;
+        stroke: #cecece;
+        stroke-width: 0.5;
+    }
+
+    .bars {
+        .bar {
+            rect {
+                fill: #e0e0e0;
+                pointer-events: none;
+            }
+            text {
+                font-size: 10px;
+                text-transform: uppercase;
+                font-weight: 700;
+                fill: #607d8b;
+            }
+            &--active {
+                rect {
+                    fill: #03a9f4;
+                    cursor: pointer;
+                    pointer-events: all;
+                    transition: fill 0.2s linear;
+                    &:hover {
+                        fill: #81d4fa;
+                    }
+                }
+            }
+        }
+    }
+}
+
