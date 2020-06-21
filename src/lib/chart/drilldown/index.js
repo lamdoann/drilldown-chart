@@ -83,23 +83,33 @@ class DrillDown extends BaseChart {
 
         mergeBars
             .attr('class', 'bar')
-            .classed('bar--active', d => d.children && d.children.length > 0)
-            .attr('transform', d => `translate(${this.xScale(d.name)}, 0)`)
-            .on('click', this.handleGoNext);
-
-        mergeBars.select('rect')
-            .attr('width', this.xScale.bandwidth())
+            .classed('bar--active', d => this.hasChildren(d))
             .transition()
                 .duration(750)
-                .ease(d3.easeBack)
+                .ease(d3.easePoly)
+            .attr('transform', d => `translate(${this.xScale(d.name)}, 0)`)
+
+        enterBars.select('rect')
+            .attr('width', this.xScale.bandwidth())
+            .attr('y', this.innerHeight)
+            .attr('height', 0);
+
+        mergeBars.select('rect')
+            .transition()
+                .duration(750)
+                .ease(d3.easeLinear)
+            .attr('width', this.xScale.bandwidth())
             .attr('y', d => this.yScale(d.value))
-            .attr('height', d => this.innerHeight - this.yScale(d.value))
+            .attr('height', d => this.innerHeight - this.yScale(d.value));
+        
+        mergeBars.select('rect')
+            .on('click', this.handleGoNext);
             
         mergeBars.select('text')
             .attr('x', this.xScale.bandwidth() / 2)
             .transition()
-                .duration(750)
-                .ease(d3.easeBack)
+                .duration(500)
+                .ease(d3.easeLinear)
             .attr('y', d => this.yScale(d.value) - 12)
             .attr('text-anchor', 'middle')
             .text(d => d3.format('$.1s')(d.value));
@@ -115,9 +125,15 @@ class DrillDown extends BaseChart {
     }
 
     handleGoNext = (data) => {
-        this.activeData = data.children;
-        this.dataHistory.push(this.activeData);
-        this.draw();
+        if (this.hasChildren(data)) {
+            this.activeData = data.children;
+            this.dataHistory.push(this.activeData);
+            this.draw();
+        }
+    }
+
+    hasChildren = (data) => {
+        return data.children && data.children.length > 0;
     }
 }
 

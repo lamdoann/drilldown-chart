@@ -8,6 +8,7 @@
 
     .axis {
         shape-rendering: crispEdges;
+        text-transform: uppercase;
     }
       
     .axis path, .axis line {
@@ -20,7 +21,7 @@
         .bar {
             rect {
                 fill: #e0e0e0;
-                pointer-events: none;
+                cursor: not-allowed;
             }
             text {
                 font-size: 10px;
